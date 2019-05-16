@@ -16,8 +16,7 @@ export const Types = {
 const INITIAL_STATE = {
   loading: false,
   data: [],
-  error: null,
-  modalIsOpen: false,
+  error: null
 };
 
 export default function developers(state = INITIAL_STATE, action) {
@@ -30,7 +29,6 @@ export default function developers(state = INITIAL_STATE, action) {
         loading: false,
         error: null,
         data: [...state.data, action.payload.data],
-        modalIsOpen: true,
       };
     case Types.ADD_FAILURE:
       return { ...state, loading: false, error: action.payload.error };

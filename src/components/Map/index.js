@@ -1,29 +1,19 @@
 import React, { Component } from 'react';
 import MapGL, { Marker } from 'react-map-gl';
-import Modal from 'react-modal';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Creators as DeveloperActions } from '../../store/ducks/developers';
+import { Creators as ModalActions } from '../../store/ducks/modal';
+
 
 import ListDevelopers from '../ListDevelopers';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import AddDeveloper from '../AddDeveloper';
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
 
 class Map extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       modalIsOpen: false,
@@ -35,9 +25,6 @@ class Map extends Component {
         zoom: 14,
       },
     };
-
-    this.openModal = this.openModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
   }
 
   componentDidMount() {
@@ -59,33 +46,25 @@ class Map extends Component {
     });
   };
 
-  openModal(e) {
-    this.setState({ modalIsOpen: true });
+  handleClickMap = async (e) => {
     const [longitude, latitude] = e.lngLat;
+    const { openModal } = this.props
+    console.tron.log(longitude)
+    await openModal({ latitude, longitude });
   }
 
-  closeModal() {
-    this.setState({ modalIsOpen: false });
-  }
 
   render() {
     return (
       <MapGL
         {...this.state.viewport}
-        onClick={this.openModal}
+        onClick={this.handleClickMap}
         mapStyle="mapbox://styles/mapbox/basic-v9"
         mapboxApiAccessToken="pk.eyJ1IjoiZGVuaXNmb3JpZ28iLCJhIjoiY2p2b2Q1eTV6MThwYzN5bnR4Z3BhaHMxMSJ9.fv6R6cp122BKk6B781-z2A"
         onViewportChange={viewport => this.setState({ viewport })}
       >
-        <Modal
-          isOpen={this.state.modalIsOpen}
-          onRequestClose={this.closeModal}
-          style={customStyles}
-          contentLabel="Add Developer"
-        >
-          <button onClick={this.closeModal}>close</button>
-          <AddDeveloper />
-        </Modal>
+        {console.tron.log(this.props)}
+        <AddDeveloper />
         <ListDevelopers />
 
         <Marker
@@ -110,10 +89,10 @@ class Map extends Component {
 }
 
 const mapStatetoProps = state => ({
-  developers: state.developers,
+  modal: state.modal
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators(DeveloperActions, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators(ModalActions, dispatch);
 
 export default connect(
   mapStatetoProps,
