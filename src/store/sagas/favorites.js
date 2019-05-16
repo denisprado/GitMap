@@ -7,8 +7,7 @@ export function* addFavorite(action) {
   try {
     const { data } = yield call(api.get, `/repos/${action.payload.repository}`);
 
-    const isDuplicated = yield select(state =>
-      state.favorites.data.find(favorite => favorite.id === data.id))
+    const isDuplicated = yield select(state => state.favorites.data.find(favorite => favorite.id === data.id));
 
     if (isDuplicated) {
       yield put(FavoriteActions.addFavoriteFailure('Repositório duplicado'));
@@ -18,6 +17,7 @@ export function* addFavorite(action) {
         name: data.name,
         description: data.description,
         url: data.html_url,
+        login: data.login,
       };
       yield put(FavoriteActions.addFavoriteSuccess(repositoryData));
     }
