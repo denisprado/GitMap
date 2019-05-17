@@ -21,6 +21,7 @@ export const Container = styled.div`
       flex-direction: row;
       align-items: center;
       border-bottom: 1px solid #999;
+      justify-content: flex-start;
       img {
         margin: 8px;
         height: 56px;
@@ -32,6 +33,7 @@ export const Container = styled.div`
         &.actions {
           flex-direction: columns;
           display: flex;
+          
         }
         i {
           margin: 8px;
