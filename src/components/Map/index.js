@@ -1,22 +1,38 @@
 import React, { Component } from 'react';
 import MapGL, { Marker } from 'react-map-gl';
+import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Creators as ModalActions } from '../../store/ducks/modal';
 
-
-import ListDevelopers from '../ListDevelopers';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import AddDeveloper from '../AddDeveloper';
-
 
 class Map extends Component {
+  static propTypes = {
+    openModal: PropTypes.func.isRequired,
+    developers: PropTypes.arrayOf({
+      data: PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        avatar_url: PropTypes.string,
+        html_url: PropTypes.string,
+        login: PropTypes.string,
+      }),
+      coordinates: PropTypes.oneOfType([
+        PropTypes.oneOf([null]),
+        PropTypes.shape({
+          latitude: PropTypes.number,
+          longitude: PropTypes.number,
+        }),
+      ]),
+    }).isRequired,
+  };
+
   constructor(props) {
     super(props);
 
     this.state = {
-      modalIsOpen: false,
       viewport: {
         width: window.innerWidth,
         height: window.innerHeight,
@@ -28,18 +44,19 @@ class Map extends Component {
   }
 
   componentDidMount() {
-    window.addEventListener('resize', this._resize);
-    this._resize();
+    window.addEventListener('resize', this.resize);
+    this.resize();
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this._resize);
+    window.removeEventListener('resize', this.resize);
   }
 
-  _resize = () => {
+  resize = () => {
+    const { viewport } = this.state;
     this.setState({
       viewport: {
-        ...this.state.viewport,
+        ...viewport,
         width: window.innerWidth,
         height: window.innerHeight,
       },
@@ -48,13 +65,14 @@ class Map extends Component {
 
   handleClickMap = async (e) => {
     const [longitude, latitude] = e.lngLat;
-    const { openModal } = this.props
-    console.tron.log(longitude)
-    await openModal({ latitude, longitude });
-  }
+    const { openModal } = this.props;
 
+    await openModal({ latitude, longitude });
+  };
 
   render() {
+    const { developers } = this.props;
+
     return (
       <MapGL
         {...this.state.viewport}
@@ -63,33 +81,32 @@ class Map extends Component {
         mapboxApiAccessToken="pk.eyJ1IjoiZGVuaXNmb3JpZ28iLCJhIjoiY2p2b2Q1eTV6MThwYzN5bnR4Z3BhaHMxMSJ9.fv6R6cp122BKk6B781-z2A"
         onViewportChange={viewport => this.setState({ viewport })}
       >
-        {console.tron.log(this.props)}
-        <AddDeveloper />
-        <ListDevelopers />
-
-        <Marker
-          latitude={-23.5439948}
-          longitude={-46.6065452}
-          onClick={this.handleMapClick}
-          captureClick
-        >
-          <img
-            style={{
-              borderRadius: 100,
-              width: 48,
-              height: 48,
-            }}
-            src="https://avatars2.githubusercontent.com/u/2254731?v=4"
-            alt="Avatar"
-          />
-        </Marker>
+        {developers.data.map(developer => (
+          <Marker
+            key={developer.id}
+            latitude={developer.coordinates.latitude}
+            longitude={developer.coordinates.longitude}
+            onClick={this.handleMapClick}
+            captureClick
+          >
+            <img
+              style={{
+                borderRadius: 100,
+                width: 48,
+                height: 48,
+              }}
+              src={developer.avatar_url}
+              alt={developer.name}
+            />
+          </Marker>
+        ))}
       </MapGL>
     );
   }
 }
 
 const mapStatetoProps = state => ({
-  modal: state.modal
+  developers: state.developers,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(ModalActions, dispatch);

@@ -8,7 +8,7 @@ import { Container } from './styles';
 
 class ListDevelopers extends Component {
   static propTypes = {
-    addDeveloperRequest: PropTypes.func.isRequired,
+    removeDeveloper: PropTypes.func.isRequired,
     developers: PropTypes.shape({
       loading: PropTypes.bool,
       data: PropTypes.arrayOf(
@@ -29,16 +29,17 @@ class ListDevelopers extends Component {
   };
 
   handleRemoveDeveloper = (id) => {
-    this.props.removeDeveloper(id);
-    this.setState({ developerInput: '' });
+    const { removeDeveloper } = this.props;
+    removeDeveloper(id);
   };
 
   render() {
+    const { developers } = this.props;
     return (
       <Fragment>
         <Container>
           <ul>
-            {this.props.developers.data.map(developer => (
+            {developers.data.map(developer => (
               <li key={developer.id}>
                 <img src={developer.avatar_url} alt={developer.name} />
                 <div className="name">
@@ -46,10 +47,15 @@ class ListDevelopers extends Component {
                   <small>{developer.login}</small>
                 </div>
                 <div className="actions">
-                  <a onClick={() => this.handleRemoveDeveloper(developer.id)}>
+                  <button type="submit" onClick={() => this.handleRemoveDeveloper(developer.id)}>
                     <i className="fa fa-times-circle" />
-                  </a>
-                  <a onClick={() => developer.html_url}>
+                  </button>
+                  <a
+                    type="submit"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={developer.html_url}
+                  >
                     <i className="fa fa-chevron-right" />
                   </a>
                 </div>

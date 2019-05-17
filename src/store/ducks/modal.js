@@ -12,18 +12,21 @@ export const Types = {
  */
 
 const INITIAL_STATE = {
-  IsModalOpen: false,
-  coordinates: null
+  isModalOpen: false,
+  coordinates: null,
 };
 
 export default function modal(state = INITIAL_STATE, action) {
   switch (action.type) {
     case Types.OPEN:
-      return { ...state, modalIsOpen: true, coordinates: action.payload.coordinates };
+      return {
+        isModalOpen: true,
+        coordinates: action.payload.coordinates,
+      };
     case Types.CLOSE:
       return {
-        ...state,
-        modalIsOpen: false,
+        isModalOpen: false,
+        coordinates: null,
       };
 
     default:
@@ -40,9 +43,8 @@ export const Creators = {
     payload: { coordinates },
   }),
 
-  closeModal: coordinates => ({
+  closeModal: () => ({
     type: Types.CLOSE,
-    coordinates: null
+    coordinates: null,
   }),
-
 };

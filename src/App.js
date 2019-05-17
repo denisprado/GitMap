@@ -9,11 +9,10 @@ import store from './store';
 
 import Routes from './routes';
 
-console.tron.log('testando');
 const App = () => (
   <div className="App">
     <GlobalStyle />
-    <ToastContainer />
+    <ToastContainer autoClose={3000} />
     <Provider store={store}>
       <Routes />
     </Provider>

@@ -16,13 +16,13 @@ export const Types = {
 const INITIAL_STATE = {
   loading: false,
   data: [],
-  error: null
+  error: null,
 };
 
 export default function developers(state = INITIAL_STATE, action) {
   switch (action.type) {
     case Types.ADD_REQUEST:
-      return { ...state, loading: true, modalIsOpen: true };
+      return { ...state, loading: true };
     case Types.ADD_SUCCESS:
       return {
         ...state,
@@ -49,9 +49,9 @@ export default function developers(state = INITIAL_STATE, action) {
  * Actions
  */
 export const Creators = {
-  addDeveloperRequest: developer => ({
+  addDeveloperRequest: (developer, coordinates) => ({
     type: Types.ADD_REQUEST,
-    payload: { developer },
+    payload: { developer, coordinates },
   }),
 
   addDeveloperSuccess: data => ({

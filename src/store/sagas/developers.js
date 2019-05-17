@@ -1,7 +1,9 @@
 import { call, put, select } from 'redux-saga/effects';
+import { toast } from 'react-toastify';
 import api from '../../services/api';
 
 import { Creators as DeveloperActions } from '../ducks/developers';
+import { Creators as ModalActions } from '../ducks/modal';
 
 export function* addDeveloper(action) {
   try {
@@ -18,10 +20,14 @@ export function* addDeveloper(action) {
         avatar_url: data.avatar_url,
         html_url: data.html_url,
         login: data.login,
+        coordinates: action.payload.coordinates,
       };
       yield put(DeveloperActions.addDeveloperSuccess(developerData));
+      toast.success('Usuário Adicionado com Sucesso');
     }
   } catch (err) {
     yield put(DeveloperActions.addDeveloperFailure('Erro ao adicionar usuário'));
+  } finally {
+    yield put(ModalActions.closeModal());
   }
 }

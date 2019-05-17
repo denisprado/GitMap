@@ -18,10 +18,11 @@ const customStyles = {
     transform: 'translate(-50%, -50%)',
   },
 };
-
+Modal.setAppElement('#root');
 class AddDevelopers extends Component {
   static propTypes = {
     addDeveloperRequest: PropTypes.func.isRequired,
+    closeModal: PropTypes.func.isRequired,
     developers: PropTypes.shape({
       loading: PropTypes.bool,
       data: PropTypes.arrayOf(
@@ -35,15 +36,18 @@ class AddDevelopers extends Component {
       ),
       error: PropTypes.string,
     }).isRequired,
+    modal: PropTypes.shape({
+      isModalOpen: PropTypes.bool,
+      coordinates: PropTypes.shape({
+        latitude: PropTypes.number,
+        longitude: PropTypes.number,
+      }),
+    }).isRequired,
   };
 
   state = {
     developerInput: '',
   };
-
-  closeModal() {
-    this.props.closeModal();
-  }
 
   notify = (msg) => {
     toast.error(msg);
@@ -51,34 +55,55 @@ class AddDevelopers extends Component {
 
   handleAddDeveloper = (e) => {
     e.preventDefault();
-    this.props.addDeveloperRequest(this.state.developerInput);
+    const { developerInput } = this.state;
+    const {
+      developers,
+      addDeveloperRequest,
+      closeModal,
+      modal: { coordinates },
+    } = this.props;
+    if (developers.loading) return;
+
+    if (!developerInput) return;
+    addDeveloperRequest(developerInput, coordinates);
     this.setState({ developerInput: '' });
+
+    closeModal();
+  };
+
+  handleCloseModal = () => {
+    const { closeModal } = this.props;
+    closeModal();
   };
 
   render() {
+    const { modal, developers } = this.props;
+    const { developerInput } = this.state;
     return (
       <Fragment>
         <Modal
-          isOpen={this.props.modalIsOpen}
-          onRequestClose={this.closeModal}
+          isOpen={modal.isModalOpen}
+          onRequestClose={this.handleCloseModal}
           style={customStyles}
           contentLabel="Add Developer"
         >
           <form onSubmit={this.handleAddDeveloper}>
             <input
               placeholder="usuário"
-              value={this.state.developerInput}
+              value={developerInput}
               onChange={e => this.setState({
                 developerInput: e.target.value,
               })
               }
             />
-            <button type="submit">Adicionar</button>
-            <button onClick={this.closeModal}>close</button>
+            <button type="submit">
+              {developers.loading ? <i className="fa fa-spinner fa-pulse" /> : 'Salvar'}
+            </button>
+            <button type="button" onClick={this.handleCloseModal}>
+              Cancelar
+            </button>
 
-            {this.props.developers.loading && <span>Carregando</span>}
-
-            {!!this.props.developers.error && this.notify(this.props.developers.error)}
+            {!!developers.error && this.notify(developers.error)}
           </form>
         </Modal>
       </Fragment>
@@ -88,10 +113,10 @@ class AddDevelopers extends Component {
 
 const mapStatetoProps = state => ({
   developers: state.developers,
-  modal: state.modal
+  modal: state.modal,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ DeveloperActions, ModalActions }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ ...DeveloperActions, ...ModalActions }, dispatch);
 
 export default connect(
   mapStatetoProps,
