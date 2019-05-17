@@ -41,10 +41,12 @@ class ListDevelopers extends Component {
           <ul>
             {developers.data.map(developer => (
               <li key={developer.id}>
-                <img src={developer.avatar_url} alt={developer.name} />
-                <div className="name">
-                  <p>{developer.name}</p>
-                  <small>{developer.login}</small>
+                <div className="developer">
+                  <img src={developer.avatar_url} alt={developer.name} />
+                  <div className="name">
+                    <p>{developer.name}</p>
+                    <small>{developer.login}</small>
+                  </div>
                 </div>
                 <div className="actions">
                   <button type="submit" onClick={() => this.handleRemoveDeveloper(developer.id)}>

@@ -21,25 +21,41 @@ export const Container = styled.div`
       flex-direction: row;
       align-items: center;
       border-bottom: 1px solid #999;
-      justify-content: flex-start;
-      img {
-        margin: 8px;
-        height: 56px;
-        width: 56px;
-        border-radius: 50%;
-      }
+      justify-content: space-between;
       div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: row;
         margin: 4px;
-        &.actions {
-          flex-direction: columns;
-          display: flex;
-          
+        &.name {
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: center;
         }
-        i {
+        img {
           margin: 8px;
+          height: 56px;
+          width: 56px;
+          border-radius: 50%;
         }
-        i.fa-times-circle {
-          color: red;
+        &.actions {
+          align-items: flex-start;
+          justify-content: center;
+          button,
+          a {
+            margin-right: 12px;
+            background-color: transparent;
+            border: none;
+            color: black;
+            cursor: pointer;
+            i {
+              font-size: 1.2em;
+            }
+            i.fa-times-circle {
+              color: red;
+            }
+          }
         }
       }
     }
