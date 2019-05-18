@@ -7,17 +7,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Creators as DeveloperActions } from '../../store/ducks/developers';
 import { Creators as ModalActions } from '../../store/ducks/modal';
+import './styles.css';
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
 Modal.setAppElement('#root');
 class AddDevelopers extends Component {
   static propTypes = {
@@ -84,10 +75,13 @@ class AddDevelopers extends Component {
         <Modal
           isOpen={modal.isModalOpen}
           onRequestClose={this.handleCloseModal}
-          style={customStyles}
-          contentLabel="Add Developer"
+          contentLabel="Add User Modal"
+          className="modal-container"
+          overlayClassName="modal-overlay"
         >
-          <form onSubmit={this.handleAddDeveloper}>
+          <h2>Adicionar novo desenvolvedor</h2>
+
+          <form onSubmit={this.handleAddDeveloper} className="form">
             <input
               placeholder="usuário"
               value={developerInput}
@@ -96,12 +90,14 @@ class AddDevelopers extends Component {
               })
               }
             />
-            <button type="submit">
-              {developers.loading ? <i className="fa fa-spinner fa-pulse" /> : 'Salvar'}
-            </button>
-            <button type="button" onClick={this.handleCloseModal}>
-              Cancelar
-            </button>
+            <div className="actions">
+              <button type="button" onClick={this.handleCloseModal}>
+                Cancelar
+              </button>
+              <button type="submit">
+                {developers.loading ? <i className="fa fa-spinner fa-pulse" /> : 'Salvar'}
+              </button>
+            </div>
 
             {!!developers.error && this.notify(developers.error)}
           </form>

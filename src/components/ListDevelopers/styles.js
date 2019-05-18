@@ -1,17 +1,15 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 300px;
-  border: 1px solid #999;
-  border-radius: 5px;
-  margin: 48px;
+  width: 22%;
+  background: rgba(255, 255, 255, 0.8);
   position: absolute;
-  top: 0;
-  left: 0;
+  left: 2%;
+  top: 3%;
+  height: 90%;
+  border-radius: 5px;
+  overflow: auto;
   ul {
-    background-color: white;
     width: 100%;
     list-style: none;
     padding: 0;
@@ -20,8 +18,9 @@ export const Container = styled.div`
       display: flex;
       flex-direction: row;
       align-items: center;
-      border-bottom: 1px solid #999;
+      border-bottom: 1px solid #ccc;
       justify-content: space-between;
+      background: rgb(255, 255, 255);
       div {
         display: flex;
         align-items: center;
