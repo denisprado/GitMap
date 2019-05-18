@@ -18,14 +18,14 @@ class Map extends Component {
         avatar_url: PropTypes.string,
         html_url: PropTypes.string,
         login: PropTypes.string,
+        coordinates: PropTypes.oneOfType([
+          PropTypes.oneOf([null]),
+          PropTypes.shape({
+            latitude: PropTypes.number,
+            longitude: PropTypes.number,
+          }),
+        ]),
       }),
-      coordinates: PropTypes.oneOfType([
-        PropTypes.oneOf([null]),
-        PropTypes.shape({
-          latitude: PropTypes.number,
-          longitude: PropTypes.number,
-        }),
-      ]),
     }).isRequired,
   };
 
@@ -36,8 +36,8 @@ class Map extends Component {
       viewport: {
         width: window.innerWidth,
         height: window.innerHeight,
-        latitude: -23.5439948,
-        longitude: -46.6065452,
+        latitude: -22.83,
+        longitude: -47.09,
         zoom: 14,
       },
     };
